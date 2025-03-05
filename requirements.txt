@@ -1,0 +1,16 @@
+sec_edgar_downloader
+langchain
+langchain-community 
+langchain-core
+langchain-openai
+chromadb
+lark
+langchain-chroma
+bs4
+python-jose[cryptography]
+passlib[bcrypt]>=1.7.4
+python-multipart
+fastapi[standard]
+yfinance>=0.2.54
+redis
+fastapi-cache2[redis]
