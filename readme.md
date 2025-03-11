@@ -43,8 +43,8 @@ Files will be saved as HTML in the `data/sec-edgar-filings` folder.
 
 ## Technical Details
 - Built with FastAPI
-- Redis caching for improved performance
-- WebSocket support for real-time data
+- Redis caching for improved performance (Yahoo Finance data only)
+- WebSocket support for real-time data (TO be implemented..)
 - Comprehensive error handling
 
 ## Installation
@@ -73,7 +73,7 @@ Files will be saved as HTML in the `data/sec-edgar-filings` folder.
    uvicorn app.main:app --reload
    ```
 
-5. Start Redis server (optional for caching data):
+5. Start Redis server (optional for caching Yahoo Finance data like income statements, balance sheets, etc.):
    ```bash
    # On Linux with Redis installed
    redis-server 
