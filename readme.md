@@ -66,7 +66,7 @@ It also provides a system **RAG** (Retrieval-Augmented Generation) via **langcha
    ```
 
 4. Start Redis server (optional for caching Yahoo Finance data like income statements, balance sheets, etc.):
-   ```bash
+  ```bash
    # On Linux with Redis installed
    redis-server 
    # or sudo systemctl start redis.service
@@ -84,13 +84,9 @@ It also provides a system **RAG** (Retrieval-Augmented Generation) via **langcha
 The application uses a configuration file `config.py` to manage the parameters.
 So you need to set some parameters in the file:
 
-for SEC you need to provide
-* COMPANY_NAME: the name of your company, or personal use
-* EMAIL: your email
-
-```python
-COMPANY_NAME = "Personal Use"
-EMAIL = "user@example.com"
+```bash
+COMPANY_NAME = "Personal Use" #the name of your company, or personal use
+EMAIL = "user@example.com"   # an email to use for the SEC Edgar
 ``` 
 
 
