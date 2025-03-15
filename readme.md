@@ -93,18 +93,18 @@ EMAIL = "user@example.com"   # an email to use for the SEC Edgar
   
 ## Run the application
 
-5. Run the application with Uvicorn:
+1. Run the application with Uvicorn:
    ```bash
    uvicorn src.api.main:app --reload
    ```
 
-6. Access the API documentation at http://localhost:8000/docs
+2. Access the API documentation at http://localhost:8000/docs
 
 ## Details 
 
 ### SEC Edgar Downloader
 
-The API includes functionality to download data from the SEC using the `sec_edgar_downloader` library.
+The API includes functionality to download data from the SEC using the `sec_edgar_downloader` library.  
 Files will be saved as HTML in the `data/sec-edgar-filings` folder. 
 
 #### Document Processing and Storage (example Form 10-K or Form 10-Q filings)
@@ -118,7 +118,7 @@ After downloading Form 10-K documents, the system:
    - Item 7A: Quantitative and Qualitative Disclosures About Market Risk
    - Item 8: Financial Statements
 
-2. **Text Processing**: Cleans and processes the extracted text to remove irrelevant HTML elements, normalize whitespace, and prepare it for vectorization.
+2. **Text Processing**: Cleans and processes the extracted text to remove irrelevant HTML elements, normalize text, and prepare it for vectorization.
 
 3. **ChromaDB Storage**: Stores the processed text in a ChromaDB vectorial database:
    - Each section is stored as a separate document with appropriate metadata (categorized by year and filing type)
@@ -127,17 +127,14 @@ After downloading Form 10-K documents, the system:
 
 ### RAG System
 
-The RAG system uses the ChromaDB vectorial database to store and retrieve SEC filings.
-And uses **langchain** manipulations to create queries with relevant long context,
- and **openai API** to create the responses.
+The RAG system uses **langchain** manipulations to create queries with relevant long context, extracting data from the vectorial database, and **openai API** to create the responses.
 So we can query the LLM with a question, and it will use the context from the database to answer the question.
 We use OpenAI  `gpt-4o-mini` to generate the responses.
 
 
-
 ### Data stocks (Yahoo Finance)
 
-The API provides a system to grab all relevant data from Yahoo Finance via yfinance library, providing:
+The API provides a system to grab all relevant data from Yahoo Finance via yfinance library, including:
 
  * Company information
  * Financial statements:
@@ -152,7 +149,7 @@ The API provides a system to grab all relevant data from Yahoo Finance via yfina
 
 ## Examples 
 
-#### Get Available Queries for a Company
+#### Get Available Queries for a Company (RAG)
 
 Retrieve available predefined queries for Apple's 10-K filings:
 
