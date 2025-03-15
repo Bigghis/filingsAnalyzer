@@ -1,6 +1,6 @@
 # Filings Analyzer API
 
-The Filings Analyzer API is a financial data platform that provides access to **SEC filings**, and to **Yahoo Finance** stocks data (statements, market data), and provides analytical tools for investment research and analysis.
+The Filings Analyzer API is a financial data platform that provides access to **SEC filings** (https://www.sec.gov/edgar/search/), and to **Yahoo Finance** stocks data (statements, market data), and provides analytical tools for investment research and analysis.
 
 It uses **yfinance** library to get the stock data from Yahoo finance, and 
 provides a system to grab all relevant data from SEC Edgar filings and save them in a ChromaDB vectorial database.  
@@ -13,7 +13,7 @@ It also provides a system **RAG** (Retrieval-Augmented Generation) via **langcha
 ### SEC Edgar Filings Analysis
 - Query and analyze SEC filings (10-K, etc.) for public companies
 - Extract specific information from filings using predefined queries
-- WebSocket support for long-running queries
+
 
 ### Financial Data (via yfinance)
 - Company information and metrics
@@ -36,22 +36,19 @@ It also provides a system **RAG** (Retrieval-Augmented Generation) via **langcha
 - JWT-based access tokens with refresh capability
 - Token blacklisting for secure logout
 
-## SEC Edgar Downloader
-
-The API includes functionality to download data from the SEC using the `sec_edgar_downloader` library.
-Files will be saved as HTML in the `data/sec-edgar-filings` folder.
 
 ## Technical Details
 - Built with FastAPI
 - Redis caching for improved performance (Yahoo Finance data only)
+- BeautifulSoup for parsing SEC filings
+- ChromaDB vectorial database for storing and retrieving SEC filings
 - WebSocket support for real-time data (TO be implemented..)
-- Comprehensive error handling
 
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/filings-analyzer-api.git
+   git clone https://github.com/yourusername/filings-analyzer-api.gitS
    cd filings-analyzer-api
    ```
 
@@ -68,12 +65,7 @@ Files will be saved as HTML in the `data/sec-edgar-filings` folder.
    pip install -r requirements.txt
    ```
 
-4. Run the application with Uvicorn:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-5. Start Redis server (optional for caching Yahoo Finance data like income statements, balance sheets, etc.):
+4. Start Redis server (optional for caching Yahoo Finance data like income statements, balance sheets, etc.):
    ```bash
    # On Linux with Redis installed
    redis-server 
@@ -84,23 +76,97 @@ Files will be saved as HTML in the `data/sec-edgar-filings` folder.
    
    # Verify Redis connection
    redis-cli ping
+  ```
+
+
+## Configuration
+
+The application uses a configuration file `config.py` to manage the parameters.
+So you need to set some parameters in the file:
+
+for SEC you need to provide
+* COMPANY_NAME: the name of your company, or personal use
+* EMAIL: your email
+
+```python
+COMPANY_NAME = "Personal Use"
+EMAIL = "user@example.com"
+``` 
+
+
+  
+## Run the application
+
+5. Run the application with Uvicorn:
+   ```bash
+   uvicorn src.api.main:app --reload
+   ```
 
 6. Access the API documentation at http://localhost:8000/docs
+
+## Details 
+
+### SEC Edgar Downloader
+
+The API includes functionality to download data from the SEC using the `sec_edgar_downloader` library.
+Files will be saved as HTML in the `data/sec-edgar-filings` folder. 
+
+#### Document Processing and Storage (example Form 10-K or Form 10-Q filings)
+
+After downloading Form 10-K documents, the system:
+
+1. **Parses HTML Content**: Uses BeautifulSoup to scan and extract text from relevant sections of the 10-K filing, including:
+   - Item 1: Business Overview
+   - Item 1A: Risk Factors
+   - Item 7: Management's Discussion and Analysis
+   - Item 7A: Quantitative and Qualitative Disclosures About Market Risk
+   - Item 8: Financial Statements
+
+2. **Text Processing**: Cleans and processes the extracted text to remove irrelevant HTML elements, normalize whitespace, and prepare it for vectorization.
+
+3. **ChromaDB Storage**: Stores the processed text in a ChromaDB vectorial database:
+   - Each section is stored as a separate document with appropriate metadata (categorized by year and filing type)
+   - The database enables semantic search and retrieval for the RAG system
+
+
+### RAG System
+
+The RAG system uses the ChromaDB vectorial database to store and retrieve SEC filings.
+And uses **langchain** manipulations to create queries with relevant long context,
+ and **openai API** to create the responses.
+So we can query the LLM with a question, and it will use the context from the database to answer the question.
+We use OpenAI  `gpt-4o-mini` to generate the responses.
+
+
+
+### Data stocks (Yahoo Finance)
+
+The API provides a system to grab all relevant data from Yahoo Finance via yfinance library, providing:
+
+ * Company information
+ * Financial statements:
+   - Balance sheets
+   - Income statements
+   - Cash flow statements
+ * Historical prices
+ * Holders compnay information
+ * generic industries and sectors information
+ * A screener to filter stocks based on custom criteria 
 
 
 ## Examples 
 
-### Get Available Queries for a Company
+#### Get Available Queries for a Company
 
-Retrieve available predefined queries for Apple's 10-K filings from the last 3 years:
+Retrieve available predefined queries for Apple's 10-K filings:
 
 ```bash
 curl -X 'GET' \
-  'http://localhost:8000/api/v1/queries/available/?symbol=AAPL&filing_type=10-K&num_years=3' \
+  'http://localhost:8000/api/v1/queries/available/?symbol=AAPL&filing_type=10-K' \
   -H 'accept: application/json'
 ```
 
-Example response:
+response:
 
 ```json
 {
@@ -121,13 +187,13 @@ Example response:
 This endpoint returns a list of available predefined queries that can be run against the specified company's filings.
 
 
-### Execute a query
+#### Execute a query
 
-Execute a predefined query for Apple's 10-K filings from the last 3 years:
+Execute a predefined query for Apple's 10-K filings:
 
 ```bash
 curl -X 'GET' \
-  'http://localhost:8000/api/v1/queries/execute/?symbol=AAPL&key=SWOT&filing_type=10-K&save_to_txt=true&num_years=3' \
+  'http://localhost:8000/api/v1/queries/execute/?symbol=AAPL&key=SWOT&filing_type=10-K&save_to_txt=true' \
   -H 'accept: application/json'
 ```
 
@@ -167,3 +233,4 @@ response:
   }
 }
 ```
+
