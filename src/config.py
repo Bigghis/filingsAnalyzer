@@ -16,8 +16,8 @@ DB_PERSIST_DIRECTORY = f"{DATA_DIRECTORY}/embeddings"
 DB_10K_DIR_NAME = "10K_items_1_1a_7_7a_8_9"
 
 #  SEC
-COMPANY_NAME = "Personal Use2"
-EMAIL = "pa.casciano@gmail.com"
+COMPANY_NAME = "Personal Use"
+EMAIL = "user@example.com"
 
 # MODEL 
 
