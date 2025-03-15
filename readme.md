@@ -105,10 +105,6 @@ for example you can save the .env file here, outside of the project folder:
 ```
 
 
-
-
-
-
   
 ## Run the application
 
@@ -123,8 +119,10 @@ for example you can save the .env file here, outside of the project folder:
 
 ### SEC Edgar Downloader
 
-The API includes functionality to download data from the SEC using the `sec_edgar_downloader` library.  
-Files will be saved as HTML in the `data/sec-edgar-filings` folder. 
+The API includes functionality to download data behind the scene from the SEC using the `sec_edgar_downloader` library.   
+Once the files are downloaded, they are processed to get relevant data, that is stored in vectorial database.
+The files can be downloaded by year and filing type, accordingly to the SEC Edgar website.
+
 
 #### Document Processing and Storage (example Form 10-K or Form 10-Q filings)
 
@@ -161,7 +159,7 @@ The API provides a system to grab all relevant data from Yahoo Finance via yfina
    - Income statements
    - Cash flow statements
  * Historical prices
- * Holders compnay information
+ * Holders company information
  * generic industries and sectors information
  * A screener to filter stocks based on custom criteria 
 
