@@ -89,6 +89,25 @@ COMPANY_NAME = "Personal Use" #the name of your company, or personal use
 EMAIL = "user@example.com"   # an email to use for the SEC Edgar
 ``` 
 
+Remember to provide your personal API keys for OpenAI and langchain (to use langsmith, if you want to track the queries and responses).
+So you need to create an '.env' file on top of the project and add the following variables:
+
+```bash
+OPENAI_API_KEY=your_openai_api_key
+LANGCHAIN_API_KEY=your_langchain_api_key
+```
+
+for example you can save the .env file here, outside of the project folder:
+
+```bash
+./filings-analyzer-api 
+.env
+```
+
+
+
+
+
 
   
 ## Run the application
