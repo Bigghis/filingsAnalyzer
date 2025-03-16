@@ -28,6 +28,28 @@ def init_db():
                 blacklisted_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        
+        # Check if demo user exists, if not create it
+        cursor.execute("SELECT * FROM users WHERE username = 'demo'")
+        user_exists = cursor.fetchone()
+        
+        if not user_exists:
+            print("Creating demo user")
+            # Create a demo user with a pre-hashed password
+            from passlib.context import CryptContext
+            pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+            hashed_password = pwd_context.hash("Demonstration1234!")
+
+            # This is the bcrypt hash of "password"
+            
+            cursor.execute(
+                "INSERT INTO users (username, email, hashed_password, full_name, disabled) VALUES (?, ?, ?, ?, ?)",
+                ("demo", "demo@example.com", hashed_password, "Demo User", False)
+            )
+            print("Demo user created successfully")
+        else:
+            print("Demo user already exists")
+        
         db.commit()
 
 @contextmanager
