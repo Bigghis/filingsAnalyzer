@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="your-project-name",
+    name="filings-analyzer",
     version="0.1",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
