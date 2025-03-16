@@ -78,6 +78,28 @@ It also provides a system **RAG** (Retrieval-Augmented Generation) via **langcha
    redis-cli ping
   ```
 
+## Docker Setup
+
+You can also run the application using Docker:
+
+1. Build the Docker image:
+   ```bash
+   docker build -t filings-analyzer-api .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -p 8000:8000 -v $(pwd)/.env:/app/.env filings-analyzer-api
+   ```
+
+   This will:
+   - Map port 8000 from the container to your host
+   - Mount your .env file into the container
+   - Start both Redis and the API service
+
+  TODO:: create and push a docker image to dockerhub
+
+3. Access the API documentation at http://localhost:8000/docs
 
 ## Configuration
 
@@ -104,7 +126,6 @@ for example you can save the .env file here, outside of the project folder:
 .env
 ```
 
-
   
 ## Run the application
 
@@ -114,6 +135,16 @@ for example you can save the .env file here, outside of the project folder:
    ```
 
 2. Access the API documentation at http://localhost:8000/docs
+
+## Authentication 
+
+There is a demo user already created, so you can use it to test the authentication API.
+
+```bash
+username: demo
+password: Demonstration1234!
+```
+
 
 ## Details 
 
@@ -242,5 +273,22 @@ response:
     }
   }
 }
+```
+
+
+### Tests 
+
+Before running tests, make sure to install the test dependencies:
+
+```bash
+pip install -r requirements-test.txt
+```
+
+All tests are located in the `tests/` directory. To run the tests, use one of the following commands from the project root:
+
+to run tests:
+
+```bash
+python run_tests.py
 ```
 
