@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 import os
-from sec.sec import get_recent_folders, download_filings, SOURCE_SEC_DIRECTORY
+from src.sec.sec import get_recent_folders, download_filings, SOURCE_SEC_DIRECTORY
 
 class TestSEC(unittest.TestCase):
     def setUp(self):

@@ -120,5 +120,12 @@ app.include_router(health.router, prefix=PREFIX)
 # Add test-specific configuration
 if os.getenv("TESTING"):
     from tests.mocks import MockQueryEngine
-    import sys
-    sys.modules['queries.QueryEngine'].QueryEngine = MockQueryEngine
+    if 'queries.QueryEngine' in sys.modules:
+        sys.modules['queries.QueryEngine'].QueryEngine = MockQueryEngine
+    else:
+        # Import the module or create a mock module
+        import sys
+        class MockModule:
+            class QueryEngine:
+                pass
+        sys.modules['queries.QueryEngine'] = MockModule

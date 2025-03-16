@@ -10,8 +10,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Set testing environment
 os.environ["TESTING"] = "1"
 
-from api.main import app
-from api.auth.database import init_db
+from src.api.main import app
+from src.api.auth.database import init_db
 
 @pytest.fixture(autouse=True)
 def setup_test_db():
@@ -64,7 +64,7 @@ def authorized_client(client, test_user_token):
 @pytest.fixture
 def mock_query_engine():
     """Mock QueryEngine for testing"""
-    with patch('api.routers.queries.QueryEngine') as mock:
+    with patch('src.api.routers.queries.QueryEngine') as mock:
         # Configure the mock
         instance = mock.return_value
         instance.query.return_value = {
